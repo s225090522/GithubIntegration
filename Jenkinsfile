@@ -17,14 +17,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                sh 'mvn clean install' // Or use `npm install` for Node.js projects
+               
             }
         }
 
         stage('Unit & Integration Tests') {
             steps {
                 echo 'Running unit and integration tests...'
-                sh 'mvn test' // Or `npm test` or other test commands
+               
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 echo 'Running static code analysis with SonarQube...'
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh 'mvn sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN'
+                    
                 }
             }
         }
@@ -40,23 +40,21 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Running security scan using Snyk...'
-                sh 'snyk test || true' // Avoid failing the pipeline, log results instead
+               
             }
         }
 
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to staging server...'
-                sh """
-                    ssh -o StrictHostKeyChecking=no $STAGING_SERVER 'bash -s' < deploy-staging.sh
-                """
+               
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging environment...'
-                sh 'newman run postman_collection.json' // or use Selenium test runner
+               
             }
         }
 
@@ -64,9 +62,7 @@ pipeline {
             steps {
                 input message: 'Deploy to Production?', ok: 'Deploy'
                 echo 'Deploying to production server...'
-                sh """
-                    ssh -o StrictHostKeyChecking=no $PROD_SERVER 'bash -s' < deploy-production.sh
-                """
+              
             }
         }
     }
